@@ -18,15 +18,16 @@ jobs:
           #  ボードレート1200でつなぐことでDFUモードに入る
           mode COM3: BAUD=1200
           arduino-cli -p com4 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
+        shell: pwsh
       - name: monitor
         run: |
-          $command = "monitor.ps1"
           $job = Start-Job -ScriptBlock {
             arduino-cli -p com3 monitor
           }
           Start-Sleep -Seconds 20
-          $jobOutput = Receive-Job -Job $job
-          Write-Host $jobOutput
+          $jobOutput = Receive-Job -Job $job -Wait
           Stop-Job -Job $job
           Remove-Job -Job $job
+          Write-Host $jobOutput
+        shell: pwsh
           
