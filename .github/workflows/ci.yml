@@ -18,6 +18,9 @@ jobs:
       - name: monitor
         run: |
           $command = "monitor.ps1"
-          $process = Start-Process -FilePath $command -PassThru
+          $job = Start-Job -ScriptBlock {
+            arduino-cli -p com3 monitor
+          }
           Start-Sleep -Seconds 10
-          $process.Kill()
+          Stop-Job -Job $job
+          Remove-Job -Job $job
