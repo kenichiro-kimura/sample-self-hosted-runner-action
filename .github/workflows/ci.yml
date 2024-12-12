@@ -19,8 +19,9 @@ jobs:
         run: |
           $command = "monitor.ps1"
           $job = Start-Job -ScriptBlock {
-            arduino-cli -p com3 monitor
+            arduino-cli -p com3 monitor --log-file monitor.log
           }
-          Start-Sleep -Seconds 10
+          Start-Sleep -Seconds 20
           Stop-Job -Job $job
           Remove-Job -Job $job
+          type monitor.log
