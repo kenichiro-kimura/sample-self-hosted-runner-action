@@ -22,11 +22,13 @@ jobs:
       - name: monitor
         run: |
           $job = Start-Job -ScriptBlock {
-            arduino-cli -p com3 monitor | Out-File -FilePath "output.log" -NoClobber -Force -Encoding UTF8
+              $process = Start-Process "arduino-cli" -ArgumentList "-p com3 monitor" -PassThru
+              $process.StandardOutput.BaseStream.CopyTo([System.IO.File]::Create("output.log"))
+              $process.WaitForExit()
           }
-          Start-Sleep -Seconds 20
+          Start-Sleep -Seconds 10
           Stop-Job -Job $job
           Remove-Job -Job $job
-          type output.log
+          Get-Content "output.log" 
         shell: pwsh
           
