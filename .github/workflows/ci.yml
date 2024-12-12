@@ -22,12 +22,11 @@ jobs:
       - name: monitor
         run: |
           $job = Start-Job -ScriptBlock {
-            arduino-cli -p com3 monitor
+            arduino-cli -p com3 monitor > output.log
           }
           Start-Sleep -Seconds 20
-          $jobOutput = Receive-Job -Job $job -Wait
           Stop-Job -Job $job
           Remove-Job -Job $job
-          Write-Host $jobOutput
+          type output.log
         shell: pwsh
           
