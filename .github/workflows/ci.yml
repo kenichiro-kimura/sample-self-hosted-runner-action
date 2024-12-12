@@ -26,6 +26,7 @@ jobs:
           }
           Start-Sleep -Seconds 20
           $jobOutput = Receive-Job -Job $job
+          Write-Host $jobOutput
           Stop-Job -Job $job
           Remove-Job -Job $job
-          Write-Host $jobOutput
+          
