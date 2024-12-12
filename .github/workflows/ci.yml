@@ -22,7 +22,7 @@ jobs:
       - name: monitor
         run: |
           Start-Sleep -Seconds 5
-          $process = Start-Process "arduino-cli" -ArgumentList "-p com3 monitor" -PassThru -NoNewWindow -RedirectStandardOutput "output.log"
+          $process = Start-Process "arduino-cli" -ArgumentList "-p com3 monitor --raw --log-file log.log" -PassThru -NoNewWindow -RedirectStandardOutput "output.log"
           Start-Sleep -Seconds 10
           if (!$process.HasExited) {
             Stop-Process -Id $process.Id
