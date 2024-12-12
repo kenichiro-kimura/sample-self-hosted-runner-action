@@ -15,14 +15,14 @@ jobs:
         run: arduino-cli compile --fqbn SeeedJP:nrf52:wio_bg770a ./sample
       - name: upload
         run: |
-          #  ボードレート1200でつなぐことでDFUモードに入る
+          #  ボーレート1200でつなぐことでDFUモードに入る
           mode COM3: BAUD=1200
           arduino-cli -p com4 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
         shell: pwsh
       - name: monitor
         run: |
           $job = Start-Job -ScriptBlock {
-            arduino-cli -p com3 monitor > output.log
+            arduino-cli -p com3 monitor | Out-File -FilePath "output.log" -NoClobber -Force -Encoding UTF8
           }
           Start-Sleep -Seconds 20
           Stop-Job -Job $job
