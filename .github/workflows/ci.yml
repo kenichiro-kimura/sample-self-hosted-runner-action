@@ -11,5 +11,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Run a one-line script
-        run: arduino-cli board list
+      - name: build and upload
+        run: arduino-cli -p com3 upload --fqbn SeeedJP:nrf52:wio_bg770a sample/sample.ino
+      - name: monitor
+        run: |
+          $command = "arduino-cli -p com3 monitor"
+          $process = Start-Process -FilePath $command -PassThru
+          Start-Sleep -Seconds 10
+          $process.Kill()
