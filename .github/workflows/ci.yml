@@ -17,7 +17,7 @@ jobs:
         run: arduino-cli -p com3 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
       - name: monitor
         run: |
-          $command = "arduino-cli -p com3 monitor"
+          $command = "monitor.ps1"
           $process = Start-Process -FilePath $command -PassThru
           Start-Sleep -Seconds 10
           $process.Kill()

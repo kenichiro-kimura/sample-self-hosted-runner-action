@@ -1,0 +1,1 @@
+arduino-cli -p com3 monitor
