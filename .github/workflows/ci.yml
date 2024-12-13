@@ -6,7 +6,8 @@ on:
 
 env:
   BOARD_FQBN: SeeedJP:nrf52:wio_bg770a
-
+  WAIT_SECONDS: 20
+  OK_MESSAGE: ***BME6800***
 jobs:
   build:
     # The type of runner that the job will run on
@@ -38,21 +39,23 @@ jobs:
       - name: monitor
         run: |
           $process = Start-Process cmd.exe -ArgumentList "/c arduino-cli monitor -p com3 --fqbn $env:FQBN --raw > output.log" -PassThru
-          Start-Sleep -Seconds 20
+          Start-Sleep -Seconds $env:WAIT_SECONDS
           if (!$process.HasExited) {
             Stop-Process -Id $process.Id
           }
         shell: pwsh
         env:
           FQBN: ${{ env.BOARD_FQBN }}
+          WAIT_SECONDS: ${{ env.WAIT_SECONDS }}
       - name: check monitor result
         run: |
           $content = Get-Content output.log
-          if ($content -match [regex]::Escape("***BME6800***")) {
+          if ($content -match [regex]::Escape($env:OK_MESSAGE)) {
             Write-Host "Success"
           } else {
             Write-Host "Failed"
             exit 1
           }
         shell: pwsh
-          
+        env:
+          OK_MESSAGE: ${{ env.OK_MESSAGE }}
