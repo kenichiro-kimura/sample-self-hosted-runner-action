@@ -28,7 +28,8 @@ jobs:
         run: |
           arduino-cli board list
           #$process = Start-Process "arduino-cli" -ArgumentList " monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-level trace ---log-file log.log" -PassThru -NoNewWindow -RedirectStandardOutput "output.log"
-          arduino-cli monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-file log.log
+          Start-Process cmd.exe -ArgumentList "/c arduino-cli monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-file log.log " -NoNewWindow -Wait
+          #arduino-cli monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-file log.log
           #Start-Sleep -Seconds 20
           #if (!$process.HasExited) {
           #  Stop-Process -Id $process.Id
