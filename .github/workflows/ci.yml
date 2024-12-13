@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  BOARD_FQBN: SeeedJP:nrf52:wio_bg770a
+
 jobs:
   build:
     # The type of runner that the job will run on
@@ -12,26 +15,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: build
-        run: arduino-cli compile --fqbn SeeedJP:nrf52:wio_bg770a ./sample
+        run: arduino-cli compile --fqbn $FQBN ./sample
+        env:
+          FQBN: ${{ env.BOARD_FQBN }}
       - name: upload
         run: |
           #  ボーレート1200でつなぐことでDFUモードに入る
           # mode COM3: BAUD=1200
           # またはボードの定義を変更し、com3とcom4で2回uploadを呼び出す
           # BG770Aの場合は以下のように変更
-          # tools.nrfutil.upload.pattern="{cmd}" {upload.verbose} dfu serial -pkg "{build.path}/{build.project_name}.zip" -p {serial.port} -b 115200 --singlebank -t 1200
+          # tools.nrfutil.upload.pattern="{cmd}" {upload.verbose} dfu serial -pkg "{build.path}/{build.project_name}.zip" -p {serial.port} -b 115200 --singlebank -t $F
           # (-t 1200を追加)
-          arduino-cli -p com3 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
-          arduino-cli -p com4 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
+          # arduino-cli -p com3 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
+          # または、Actionsの環境だとmonitorコマンドがすぐに終了するのを逆手にとって
+          # arduino-cli -p com3 --config baudrate=1200 --fqbn $FQBN
+          # のいずれかを実行する
+          arduino-cli -p com3 --config baudrate=1200 --fqbn $FQBN
+          arduino-cli -p com4 upload --fqbn $env:FQBN ./sample
         shell: pwsh
+        env:
+          FQBN: ${{ env.BOARD_FQBN }}
       - name: monitor
         run: |
-          $process = Start-Process cmd.exe -ArgumentList "/c arduino-cli monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw > output.log" -PassThru
+          $process = Start-Process cmd.exe -ArgumentList "/c arduino-cli monitor -p com3 --fqbn $env:FQBN --raw > output.log" -PassThru
           Start-Sleep -Seconds 20
           if (!$process.HasExited) {
             Stop-Process -Id $process.Id
           }
         shell: pwsh
+        env:
+          FQBN: ${{ env.BOARD_FQBN }}
       - name: check monitor result
         run: |
           $content = Get-Content output.log
