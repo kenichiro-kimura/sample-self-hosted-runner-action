@@ -35,7 +35,7 @@ jobs:
       - name: check monitor result
         run: |
           $content = Get-Content output.log
-          if ($content -match "***BME6800***") {
+          if ($content -match [regex]::Escape("***BME6800***")) {
             Write-Host "Success"
           } else {
             Write-Host "Failed"
