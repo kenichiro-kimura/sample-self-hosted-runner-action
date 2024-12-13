@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: build
-        run: arduino-cli compile --fqbn $FQBN ./sample
+        run: arduino-cli compile --fqbn $env:FQBN ./sample
         env:
           FQBN: ${{ env.BOARD_FQBN }}
       - name: upload
