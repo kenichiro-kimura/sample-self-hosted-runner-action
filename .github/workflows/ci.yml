@@ -28,9 +28,9 @@ jobs:
           # (-t 1200を追加)
           # arduino-cli -p com3 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
           # または、Actionsの環境だとmonitorコマンドがすぐに終了するのを逆手にとって
-          # arduino-cli -p com3 --config baudrate=1200 --fqbn $FQBN
+          # arduino-cli -p com3 monitor --config baudrate=1200 --fqbn $FQBN
           # のいずれかを実行する
-          arduino-cli -p com3 --config baudrate=1200 --fqbn $FQBN
+          arduino-cli -p com3 monitor --config baudrate=1200 --fqbn $FQBN
           arduino-cli -p com4 upload --fqbn $env:FQBN ./sample
         shell: pwsh
         env:
