@@ -27,11 +27,12 @@ jobs:
       - name: monitor
         run: |
           arduino-cli board list
-          $process = Start-Process "arduino-cli" -ArgumentList " monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-file log.log" -PassThru -NoNewWindow -RedirectStandardOutput "output.log"
-          Start-Sleep -Seconds 20
-          if (!$process.HasExited) {
-            Stop-Process -Id $process.Id
-          }
-          Get-Content "output.log" 
+          #$process = Start-Process "arduino-cli" -ArgumentList " monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-file log.log" -PassThru -NoNewWindow -RedirectStandardOutput "output.log"
+          arduino-cli monitor -p com3 --fqbn SeeedJP:nrf52:wio_bg770a --raw --log-file log.log
+          #Start-Sleep -Seconds 20
+          #if (!$process.HasExited) {
+          #  Stop-Process -Id $process.Id
+          #}
+          #Get-Content "output.log" 
         shell: pwsh
           
