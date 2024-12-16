@@ -31,7 +31,7 @@ jobs:
           # または
           # arduino-cli -p com3 monitor --config baudrate=1200 --fqbn $FQBN
           # のいずれかを実行する
-          arduino-cli -p com3 upload --fqbn SeeedJP:nrf52:wio_bg770a ./sample
+          arduino-cli -p com3 upload --fqbn $env:FQBN ./sample
           arduino-cli -p com4 upload --fqbn $env:FQBN ./sample
         shell: pwsh
         env:
